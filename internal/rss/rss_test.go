@@ -1,43 +1,66 @@
 package rss
 
-import "testing"
+import (
+	"testing"
+)
 
 func Test_getRSS(t *testing.T) {
 	type args struct {
 		url string
 	}
 	tests := []struct {
-		name string
-		args args
+		name    string
+		args    args
+		wantErr bool
 	}{
 		{
-			name: "RSS1",
+			name: "RSS_url_1",
 			args: args{
 				url: "https://habr.com/ru/rss/hub/go/all/?fl=ru",
 			},
+			wantErr: false,
 		},
 		{
-			name: "RSS2",
+			name: "RSS_url_2",
 			args: args{
 				url: "https://habr.com/ru/rss/best/daily/?fl=ru",
 			},
+			wantErr: false,
 		},
 		{
-			name: "RSS3",
+			name: "RSS_url_3",
 			args: args{
 				url: "https://cprss.s3.amazonaws.com/golangweekly.com.xml",
 			},
+			wantErr: false,
+		},
+		{
+			name: "RSS_url_4_error",
+			args: args{
+				url: "https://localhost:1111/",
+			},
+			wantErr: true,
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			list, err := getRSS(tt.args.url)
-			if err != nil {
-				t.Error(err)
+			t.Parallel()
+			got, err := getRSS(tt.args.url)
+
+			if (err != nil) != tt.wantErr {
+				t.Errorf("getRSS() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			} else if err != nil {
+				t.Log(err)
+				return
 			}
-			t.Log(list[0].Title)
-			t.Log(list[1].Title)
-			t.Log(list[2].Title)
+
+			if (err == nil) && (got == nil) {
+				t.Errorf("getRSS() got = nil, want not nil")
+				return
+			} else if got != nil {
+				t.Log("Последняя RSS: ", got[0].Title)
+			}
 		})
 	}
 }

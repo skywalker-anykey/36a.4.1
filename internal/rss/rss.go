@@ -1,7 +1,6 @@
 package rss
 
 import (
-	"errors"
 	"github.com/mmcdole/gofeed"
 )
 
@@ -21,11 +20,11 @@ func getRSS(url string) ([]Post, error) {
 		return nil, err
 	}
 
+	var posts []Post
 	if len(feed.Items) == 0 {
-		return nil, errors.New("feed is empty")
+		return posts, nil // отсутствие RSS не ошибка, новостей может и не быть
 	}
 
-	var posts []Post
 	for _, item := range feed.Items {
 		posts = append(posts, Post{
 			ID:      item.GUID,
