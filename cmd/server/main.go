@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"hw36a.4.1/internal/conf"
+	"hw36a.4.1/internal/postgres"
 	"log"
 )
 
@@ -27,6 +28,14 @@ func main() {
 		log.Fatal(err)
 	}
 	fmt.Println(bdConf)
+
+	// Инициализация БД (таблица пересоздается-обнуляется)
+	data, err := postgres.New(bdConf)
+	if err != nil {
+		log.Fatal(err)
+	}
+	_ = data
+
 }
 
 // Примерный алгоритм работы
@@ -34,8 +43,7 @@ func main() {
 // init RSS config
 // for rss goroutines - read rss - check cache (if rss not in cache/db - add db)
 
-// init http
-// http - api - show news from DB
+// init http (api - show news from DB)
 
 /*
 // Сервер GoNews.
@@ -51,7 +59,7 @@ func main() {
 	// Создаём объекты баз данных.
 
 	// БД в памяти.
-	db1 := memdb.New()
+	db1 := memDB.New()
 
 	// Реляционная БД Postgres SQL.
 	db2, err := postgres.New("postgres://sandbox:sandbox@localhost:5432/news")
@@ -78,5 +86,4 @@ func main() {
 	// Маршрутизатор будет выбирать нужный обработчик.
 	_ = http.ListenAndServe(":8080", srv.api.Router())
 }
-
 */
