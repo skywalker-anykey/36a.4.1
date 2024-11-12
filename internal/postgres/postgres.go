@@ -59,7 +59,7 @@ func (s *Store) Posts(n int) ([]rss.Post, error) {
 	}
 
 	var posts []rss.Post
-	// итерирование по результату выполнения запроса
+	// Проходим по результату выполнения запроса
 	// и сканирование каждой строки в переменную
 	for rows.Next() {
 		var post rss.Post

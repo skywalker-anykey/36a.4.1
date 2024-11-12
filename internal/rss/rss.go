@@ -6,14 +6,15 @@ import (
 
 // Post Публикация, получаемая из RSS.
 type Post struct {
-	ID      string `json:"guid,omitempty"`        // номер записи
-	Title   string `json:"title,omitempty"`       // заголовок публикации
-	Content string `json:"description,omitempty"` // содержание публикации
-	PubTime int64  `json:"pubDate,omitempty"`     // время публикации
-	Link    string `json:"link,omitempty"`        // ссылка на источник
+	ID      string `json:"guid,omitempty"`        // Номер записи
+	Title   string `json:"title,omitempty"`       // Заголовок публикации
+	Content string `json:"description,omitempty"` // Содержание публикации
+	PubTime int64  `json:"pubDate,omitempty"`     // Время публикации
+	Link    string `json:"link,omitempty"`        // Ссылка на источник
 }
 
-func getRSS(url string) ([]Post, error) {
+// GetRSS - получает список новостей из RSS и декодирует в объекты Post
+func GetRSS(url string) ([]Post, error) {
 	fp := gofeed.NewParser()
 	feed, err := fp.ParseURL(url)
 	if err != nil {

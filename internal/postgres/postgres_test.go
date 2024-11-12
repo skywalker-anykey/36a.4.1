@@ -8,6 +8,7 @@ import (
 	"time"
 )
 
+// Настройки подключение БД
 var confBD = conf.BDConfig{
 	Name:     "rss",
 	Port:     5432,
@@ -117,6 +118,7 @@ func TestStore_Posts(t *testing.T) {
 			if !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("Posts() got = %v, want %v", got, tt.want)
 			}
+			t.Log(got)
 		})
 	}
 }
