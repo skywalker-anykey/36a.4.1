@@ -6,11 +6,11 @@ import (
 
 // Post Публикация, получаемая из RSS.
 type Post struct {
-	ID      string `json:"guid,omitempty"`        // Номер записи
-	Title   string `json:"title,omitempty"`       // Заголовок публикации
-	Content string `json:"description,omitempty"` // Содержание публикации
-	PubTime int64  `json:"pubDate,omitempty"`     // Время публикации
-	Link    string `json:"link,omitempty"`        // Ссылка на источник
+	ID      string `json:"ID,omitempty"`      // Номер записи
+	Title   string `json:"Title,omitempty"`   // Заголовок публикации
+	Content string `json:"Content,omitempty"` // Содержание публикации
+	PubTime int64  `json:"PubTime,omitempty"` // Время публикации
+	Link    string `json:"Link,omitempty"`    // Ссылка на источник
 }
 
 // GetRSS - получает список новостей из RSS и декодирует в объекты Post
