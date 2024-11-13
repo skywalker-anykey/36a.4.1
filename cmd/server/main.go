@@ -1,10 +1,12 @@
 package main
 
 import (
+	"hw36a.4.1/internal/api"
 	"hw36a.4.1/internal/conf"
 	"hw36a.4.1/internal/postgres"
 	"hw36a.4.1/internal/rss"
 	"log"
+	"net/http"
 	"time"
 )
 
@@ -14,6 +16,10 @@ const (
 	// pathBDConfig путь к конфигурации BD
 	pathBDConfig = "./cmd/server/BD.json"
 )
+
+type server struct {
+	api *api.API
+}
 
 func main() {
 	// Загружаем конфигурацию RSS из конфига
@@ -43,9 +49,14 @@ func main() {
 		go reporter(pipe, data)
 	}
 
-	// Временное решение для тестов
-	// TODO: убрать после теста
-	time.Sleep(time.Second * 65)
+	// Создаём объект сервера.
+	var srv server
+
+	// Создаём объект API и регистрируем обработчики.
+	srv.api = api.New(*data)
+
+	// Запускаем сервер
+	_ = http.ListenAndServe(":80", srv.api.Router())
 
 }
 
@@ -118,48 +129,3 @@ func reporter(input <-chan rss.Post, dataBase *postgres.Store) {
 		}
 	}()
 }
-
-// Примерный алгоритм работы
-
-/*
-// Сервер GoNews.
-type server struct {
-	db  storage.Interface
-	api *api.API
-}
-
-func main() {
-	// Создаём объект сервера.
-	var srv server
-
-	// Создаём объекты баз данных.
-
-	// БД в памяти.
-	db1 := memDB.New()
-
-	// Реляционная БД Postgres SQL.
-	db2, err := postgres.New("postgres://sandbox:sandbox@localhost:5432/news")
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	// Документная БД MongoDB.
-	db3, err := mongo.New("mongodb://192.168.1.20:27017/", "news")
-	if err != nil {
-		log.Fatal(err)
-	}
-	_, _, _ = db1, db2, db3
-
-	// Инициализируем хранилище сервера конкретной БД.
-	srv.db = db3
-
-	// Создаём объект API и регистрируем обработчики.
-	srv.api = api.New(srv.db)
-
-	// Запускаем веб-сервер на порту 8080 на всех интерфейсах.
-	// Предаём серверу маршрутизатор запросов,
-	// поэтому сервер будет все запросы отправлять на маршрутизатор.
-	// Маршрутизатор будет выбирать нужный обработчик.
-	_ = http.ListenAndServe(":8080", srv.api.Router())
-}
-*/
