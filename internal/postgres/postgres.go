@@ -46,7 +46,8 @@ CHECK((id !='') AND (title !='') AND (content !='') AND (pub_time !=0) AND (link
 func (s *Store) AddPost(p rss.Post) error {
 	sql := `INSERT INTO posts (id, title, content, pub_time, link) VALUES ($1, $2, $3, $4, $5);`
 	_, err := s.db.Exec(context.Background(), sql, &p.ID, &p.Title, &p.Content, &p.PubTime, &p.Link)
-	return err
+
+	return fmt.Errorf("ошибка добавления новости в БД: %s", err)
 }
 
 // Posts - вернуть n последних новостей
